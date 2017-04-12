@@ -1,0 +1,1 @@
+java -cp /home/glende/.m2/repository/edu/princeton/cs/algs4/1.0.0.0/algs4-1.0.0.0.jar:/home/glende/.m2/repository/de/glende/alg4/perculation/1.0.0.0/perculation-1.0.0.0.jar InteractivePercolationVisualizer

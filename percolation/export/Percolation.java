@@ -1,189 +1,111 @@
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
-/**
- * Builds a N*N sized WeightedQuickUnionUF grid to mock create a simple percolation system. Initially all
- * nodes in the grid are blocked and must be opened. The grid is considered to percolate when there is a
- * connection from an open node on the top row to an open node on the bottom row.
- *
- * Whether a node is open or not is kept in an array. All connections are done through a WeightedQuickUnionUF object.
- *
- * We have a second WeightedQuickUnionUF object for checking fullness so as to not run into the backwash issue.
- */
 public class Percolation {
-    private WeightedQuickUnionUF grid;
-    private WeightedQuickUnionUF full;
-    private int N;
-    private int top;
-    private int bottom;
-    private boolean[] openNodes;
+    private final int boundary;
+    private final int N;
+    private final boolean[] open;
+    private final WeightedQuickUnionUF grid;
+    private final WeightedQuickUnionUF full;
     private int opens;
+    private final int top;
+    private final int bottom;
 
-    /**
-     * Initialises an N * N WeightedQuickUnionUF object plus two extra nodes for the virtual top and virtual bottom
-     * nodes. Creates an internal boolean array to keep track of whether a node is considered open or not.
-     *
-     * Also initialises a second N * N WeightedQuickUnionUF object plus one extra node as a second collection to check
-     * for fullness and avoid the backwash issue.
-     *
-     * @param N The dimensions of the grid
-     */
-    public Percolation(int N) {
-        if (N <= 0) {
-            throw new java.lang.IllegalArgumentException("Woah, N must be greater than zero");
-        }
-
-        grid = new WeightedQuickUnionUF(N * N + 2);
-        full = new WeightedQuickUnionUF(N * N + 1);
-
-        this.N = N;
-
-        top = getSingleArrayIdx(N, N) + 1;
-        bottom = getSingleArrayIdx(N, N) + 2;
-
-        openNodes = new boolean[N * N];
+    // create n-by-n grid, with all sites blocked
+    public Percolation(int n) {
+        if (n <= 0) throw new IllegalArgumentException("n <= 0: " + n);
+        N = n;
+        boundary = N * N;
+        open = new boolean[boundary + 2];
+        grid = new WeightedQuickUnionUF(boundary + 2);
+        full = new WeightedQuickUnionUF(boundary + 1);
+        open[0] = true;
+        open[boundary + 1] = true;
+        top = 0;
+        bottom = boundary + 1;
     }
 
-    /**
-     * Converts an index for a 0-based array from two grid coordinates which are 1-based. First checks to see if the
-     * coordinates are out of bounds.
-     *
-     * @param i Node row
-     * @param j Node column
-     * @return
-     */
-    private int getSingleArrayIdx(int i, int j) {
-        doOutOfBoundsCheck(i, j);
-
-        return (N * (i - 1) + j) - 1;
+    private int twoDToOneD(int row, int col) {
+        return 1 + (row - 1) * N + col - 1;
     }
 
-    /**
-     * Checks to see if two given coordinates are valid. I.e - a coodinate is valid if it is greater than 0
-     * and smaller than the dimensions of the parent grid
-     *
-     * @param i Node row
-     * @param j Node column
-     * @return
-     */
-    private boolean isValid(int i, int j) {
-        return i > 0
-                && j > 0
-                && i <= N
-                && j <= N;
+    private boolean valid(int row, int col) {
+        if (row <= 0 || col <= 0) return false;
+        if (row > N || col > N) return false;
+        return true;
     }
 
-    /**
-     * Throws an error if the given coordinates are valid (the valid state comes from the `isValid` function
-     * @param i Node row
-     * @param j Node column
-     */
-    private void doOutOfBoundsCheck(int i, int j) {
-        if (!isValid(i, j)) {
-            throw new IndexOutOfBoundsException("Boo! Values are out of bounds");
+    private void connect(int row1, int col1, int row2, int col2) {
+        if (valid(row2, col2)) {
+            if (isOpen(row2, col2)) {
+                grid.union(twoDToOneD(row1, col1), twoDToOneD(row2, col2));
+                full.union(twoDToOneD(row1, col1), twoDToOneD(row2, col2));
+            }
         }
     }
 
-    /**
-     * Sets a given node coordinates to be open (if it isn't open already). First is sets the appropriate index of the
-     * `openNodes` array to be true and then attempts to union with all adjacent open nodes (if any).
-     *
-     * If the node is in the first row then it will union with the virtual top node. If the node is in the last row
-     * then it will union with the virtual bottom row.
-     *
-     * This does connections both for the internal `grid` WeightedQuickUnionUF as well as the `full` WeightedQuickUnionUF,
-     * but checkes to make sure that the nodes in `full` never connect to the virtual bottom node.
-     *
-     * @param i Node row
-     * @param j Node column
-     */
-    public void open(int i, int j) {
-        doOutOfBoundsCheck(i, j);
+    private void connectTop(int row, int col) {
+        connect(row, col, row - 1, col);
 
-        if (isOpen(i, j)) {
-            // No need to open this again as it's already open
-            return;
+        if (row == 1) {
+            grid.union(twoDToOneD(row, col), top);
+            full.union(twoDToOneD(row, col), top);
         }
+    }
 
-        int idx = getSingleArrayIdx(i, j);
-        openNodes[idx] = true;
+    private void connectBottom(int row, int col) {
+        connect(row, col, row + 1, col);
+
+        if (row == N) {
+            grid.union(twoDToOneD(row, col), bottom);
+        }
+    }
+
+    private void connectLeft(int row, int col) {
+        connect(row, col, row, col - 1);
+    }
+
+    private void connectRight(int row, int col) {
+        connect(row, col, row, col + 1);
+    }
+
+    // open site (row, col) if it is not open already
+    public void open(int row, int col) {
+        if (isOpen(row, col)) return;
+
         opens++;
+        open[twoDToOneD(row, col)] = true;
 
-
-        // Node is in the top row. Union node in `grid` and `full` to the virtual top row.
-        if (i == 1) {
-            grid.union(top, idx);
-            full.union(top, idx);
-        }
-
-        // Node is in the bottom row. Only union the node in `grid` to avoid backwash issue.
-        if (i == N) {
-            grid.union(bottom, idx);
-        }
-
-        // Union with the node above the given node if it is already open
-        if (isValid(i - 1, j) && isOpen(i - 1, j)) {
-            grid.union(getSingleArrayIdx(i - 1, j), idx);
-            full.union(getSingleArrayIdx(i - 1, j), idx);
-        }
-
-        // Union with the node to the right of the given node if it is already open
-        if (isValid(i, j + 1) && isOpen(i, j + 1)) {
-            grid.union(getSingleArrayIdx(i, j + 1), idx);
-            full.union(getSingleArrayIdx(i, j + 1), idx);
-        }
-
-        // Union with the node below the given node if it is already open
-        if (isValid(i + 1, j) && isOpen(i + 1, j)) {
-            grid.union(getSingleArrayIdx(i + 1, j), idx);
-            full.union(getSingleArrayIdx(i + 1, j), idx);
-
-        }
-
-        // Union with the node to the left of the given node if it is already open
-        if (isValid(i, j - 1) && isOpen(i, j - 1)) {
-            grid.union(getSingleArrayIdx(i, j - 1), idx);
-            full.union(getSingleArrayIdx(i, j - 1), idx);
-        }
+        connectTop(row, col);
+        connectBottom(row, col);
+        connectLeft(row, col);
+        connectRight(row, col);
     }
 
-    /**
-     * Whether this node id open. This is checked against the internal `openNodes` array.
-     *
-     * @param i Node row
-     * @param j Node column
-     * @return
-     */
-    public boolean isOpen(int i, int j) {
-        doOutOfBoundsCheck(i, j);
+    // is site (row, col) open?
+    public boolean isOpen(int row, int col) {
+        if (!valid(row, col)) {
+            throw new IndexOutOfBoundsException("invalid boundary");
+        }
 
-        return openNodes[getSingleArrayIdx(i, j)];
+        return open[twoDToOneD(row, col)];
     }
 
-    /**
-     * Checks if a given node if 'full'. A node is considered full if it connects to the virtual top node.
-     * Note that this check is against the full WeightedQuickUnionUF object which is not connected to the virtual
-     * bottom node so that we don't get affected by backwash.
-     *
-     * @param i Node row
-     * @param j Node column
-     * @return
-     */
-    public boolean isFull(int i, int j) {
-        int idx = getSingleArrayIdx(i, j);
-        return full.connected(idx, top);
-    }
+    // is site (row, col) full?
+    public boolean isFull(int row, int col) {
+        if (!valid(row, col)) {
+            throw new IndexOutOfBoundsException("invalid boundary");
+        }
 
-    /**
-     * Does this grid percolate? It percolates if the virtual top node connects to the virtual bottom node
-     *
-     * @return
-     */
-    public boolean percolates() {
-        return grid.connected(top , bottom);
+        return full.connected(0, twoDToOneD(row, col));
     }
 
     // number of open sites
     public int numberOfOpenSites() {
-      return opens;
+        return opens;
+    }
+
+    // does the system percolate?
+    public boolean percolates() {
+        return grid.connected(0, boundary + 1);
     }
 }

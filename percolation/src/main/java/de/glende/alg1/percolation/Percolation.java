@@ -7,9 +7,10 @@ public class Percolation {
     private final int N;
     private final boolean[] open;
     private final WeightedQuickUnionUF grid;
+    private final WeightedQuickUnionUF full;
     private int opens;
-    private final boolean[] bottoms;
-    private final boolean[] tops;
+    private final int top;
+    private final int bottom;
 
     // create n-by-n grid, with all sites blocked
     public Percolation(int n) {
@@ -18,10 +19,12 @@ public class Percolation {
         boundary = N * N;
         open = new boolean[boundary + 2];
         grid = new WeightedQuickUnionUF(boundary + 2);
-        open[0] = true;
-        open[boundary + 1] = true;
-        bottoms = new boolean[N];
-        tops = new boolean[N];
+        full = new WeightedQuickUnionUF(boundary + 1);
+        top = 0;
+        bottom = boundary + 1;
+        open[top] = true;
+        open[bottom] = true;
+
     }
 
     int twoDToOneD(int row, int col) {
@@ -36,22 +39,28 @@ public class Percolation {
 
     private void connect(int row1, int col1, int row2, int col2) {
         if (valid(row2, col2)) {
-            if (isOpen(row2, col2))
+            if (isOpen(row2, col2)) {
                 grid.union(twoDToOneD(row1, col1), twoDToOneD(row2, col2));
+                full.union(twoDToOneD(row1, col1), twoDToOneD(row2, col2));
+            }
         }
     }
 
     private void connectTop(int row, int col) {
         connect(row, col, row - 1, col);
 
-        if (row == 1 && !tops[col-1]) {
-            grid.union(twoDToOneD(row, col), 0);
-            tops[col-1] = true;
+        if (row == 1) {
+            grid.union(twoDToOneD(row, col), top);
+            full.union(twoDToOneD(row, col), top);
         }
     }
 
     private void connectBottom(int row, int col) {
         connect(row, col, row + 1, col);
+
+        if (row == N) {
+            grid.union(twoDToOneD(row, col), bottom);
+        }
     }
 
     private void connectLeft(int row, int col) {
@@ -73,19 +82,6 @@ public class Percolation {
         connectBottom(row, col);
         connectLeft(row, col);
         connectRight(row, col);
-
-        connectToLast();
-    }
-
-    private void connectToLast() {
-        for (int c = 1; c<=N; c++) {
-            if (!bottoms[c - 1]) {
-                if (isFull(N, c)) {
-                    grid.union(twoDToOneD(N, c), boundary + 1);
-                    bottoms[c - 1] = true;
-                }
-            }
-        }
     }
 
     // is site (row, col) open?
@@ -103,7 +99,7 @@ public class Percolation {
             throw new IndexOutOfBoundsException("invalid boundary");
         }
 
-        return grid.connected(0, twoDToOneD(row, col));
+        return full.connected(top, twoDToOneD(row, col));
     }
 
     // number of open sites
@@ -113,6 +109,6 @@ public class Percolation {
 
     // does the system percolate?
     public boolean percolates() {
-        return grid.connected(0, boundary + 1);
+        return grid.connected(top, bottom);
     }
 }
