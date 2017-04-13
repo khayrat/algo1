@@ -28,21 +28,19 @@ public class Percolation {
     }
 
     int twoDToOneD(int row, int col) {
-        return 1 + (row - 1) * N + col - 1;
+        return (row - 1) * N + col;
     }
 
     boolean valid(int row, int col) {
         if (row <= 0 || col <= 0) return false;
-        if (row > N || col > N) return false;
+        if (row > N  || col > N)  return false;
         return true;
     }
 
     private void connect(int row1, int col1, int row2, int col2) {
-        if (valid(row2, col2)) {
-            if (isOpen(row2, col2)) {
-                grid.union(twoDToOneD(row1, col1), twoDToOneD(row2, col2));
-                full.union(twoDToOneD(row1, col1), twoDToOneD(row2, col2));
-            }
+        if (valid(row2, col2) && isOpen(row2, col2)) {
+            grid.union(twoDToOneD(row1, col1), twoDToOneD(row2, col2));
+            full.union(twoDToOneD(row1, col1), twoDToOneD(row2, col2));
         }
     }
 
