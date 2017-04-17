@@ -5,6 +5,9 @@
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class DequeueTest {
     @Test
     public void isEmptyEmptyTest() {
@@ -83,5 +86,35 @@ public class DequeueTest {
         for (String s: dq) {
             Assert.assertEquals(s, strings[i++]);
         }
+    }
+
+    @Test
+    public void iteratorSizeTest() {
+        Set<String> set = new HashSet<>();
+        set.add("a");
+        set.add("b");
+        set.add("c");
+        set.add("d");
+        set.add("e");
+
+        // enqueue
+        Deque<String> dq = new Deque<>();
+        for (String s: set) dq.addFirst(s);
+
+        Assert.assertEquals(dq.size(), set.size());
+
+        // iterate
+        int count = dq.size();
+
+        for (String s: dq) {
+            Assert.assertTrue(set.contains(s));
+            set.remove(s);
+            count--;
+        }
+
+        Assert.assertEquals(count, set.size());
+        Assert.assertEquals(count, 0);
+
+
     }
 }
