@@ -3,3 +3,4 @@ start    end
 21:35    23:25
 15:30    16:45  added Randomized Queue
 16:45    16:55  added iterator
+16:55    17:20  added Permutation
