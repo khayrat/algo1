@@ -21,7 +21,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Deque.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Deque.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/Deque.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="210">
@@ -47,11 +47,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RandomizedQueue.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="RandomizedQueue.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/RandomizedQueue.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="40" column="59" selection-start-line="40" selection-start-column="59" selection-end-line="40" selection-end-column="59" />
+            <state relative-caret-position="165">
+              <caret line="71" column="26" selection-start-line="71" selection-start-column="26" selection-end-line="71" selection-end-column="26" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#353#354#0" expanded="true" />
@@ -60,12 +60,10 @@
                 <element signature="e#521#522#0" expanded="true" />
                 <element signature="e#624#625#0" expanded="true" />
                 <element signature="e#651#652#0" expanded="true" />
-                <element signature="e#1488#1489#0" expanded="true" />
-                <element signature="e#1530#1531#0" expanded="true" />
-                <element signature="e#2186#2187#0" expanded="true" />
-                <element signature="e#2226#2227#0" expanded="true" />
-                <element signature="e#2696#2697#0" expanded="true" />
-                <element signature="e#2747#2748#0" expanded="true" />
+                <element signature="e#2243#2244#0" expanded="true" />
+                <element signature="e#2283#2284#0" expanded="true" />
+                <element signature="e#2753#2754#0" expanded="true" />
+                <element signature="e#2804#2805#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -128,9 +126,9 @@
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/test/java/RandomizedQueueTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/Permutation.java" />
-        <option value="$PROJECT_DIR$/src/main/java/RandomizedQueue.java" />
         <option value="$PROJECT_DIR$/src/test/java/DequeueTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/Deque.java" />
+        <option value="$PROJECT_DIR$/src/main/java/RandomizedQueue.java" />
       </list>
     </option>
   </component>
@@ -700,8 +698,8 @@
     <history-entry file="DequeueTest - 2017.04.17 at 18h 59m 20s.xml">
       <configuration name="DequeueTest" configurationId="TestNG" />
     </history-entry>
-    <history-entry file="RandomizedQueueTest - 2017.04.17 at 16h 36m 08s.xml">
-      <configuration name="RandomizedQueueTest" configurationId="TestNG" />
+    <history-entry file="DequeueTest - 2017.04.17 at 19h 19m 50s.xml">
+      <configuration name="DequeueTest" configurationId="TestNG" />
     </history-entry>
     <history-entry file="RandomizedQueueTest - 2017.04.17 at 16h 38m 03s.xml">
       <configuration name="RandomizedQueueTest" configurationId="TestNG" />
@@ -840,28 +838,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/RandomizedQueue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="40" column="59" selection-start-line="40" selection-start-column="59" selection-end-line="40" selection-end-column="59" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#353#354#0" expanded="true" />
-            <element signature="e#399#400#0" expanded="true" />
-            <element signature="e#489#490#0" expanded="true" />
-            <element signature="e#521#522#0" expanded="true" />
-            <element signature="e#624#625#0" expanded="true" />
-            <element signature="e#651#652#0" expanded="true" />
-            <element signature="e#1488#1489#0" expanded="true" />
-            <element signature="e#1530#1531#0" expanded="true" />
-            <element signature="e#2186#2187#0" expanded="true" />
-            <element signature="e#2226#2227#0" expanded="true" />
-            <element signature="e#2696#2697#0" expanded="true" />
-            <element signature="e#2747#2748#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/DequeueTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
@@ -880,6 +856,26 @@
             <element signature="e#497#498#0" expanded="true" />
             <element signature="e#3127#3128#0" expanded="true" />
             <element signature="e#3177#3178#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/RandomizedQueue.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="71" column="26" selection-start-line="71" selection-start-column="26" selection-end-line="71" selection-end-column="26" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#353#354#0" expanded="true" />
+            <element signature="e#399#400#0" expanded="true" />
+            <element signature="e#489#490#0" expanded="true" />
+            <element signature="e#521#522#0" expanded="true" />
+            <element signature="e#624#625#0" expanded="true" />
+            <element signature="e#651#652#0" expanded="true" />
+            <element signature="e#2243#2244#0" expanded="true" />
+            <element signature="e#2283#2284#0" expanded="true" />
+            <element signature="e#2753#2754#0" expanded="true" />
+            <element signature="e#2804#2805#0" expanded="true" />
           </folding>
         </state>
       </provider>

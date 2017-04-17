@@ -6,3 +6,4 @@ start    end
 16:55    17:20  added Permutation
 19:50    17:51  fixed enqueue
 19:51    18:00  fixed iterator
+19:15    19:20  fixed loitering

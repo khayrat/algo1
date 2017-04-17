@@ -69,6 +69,8 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     private void reorder(int idx) {
         items[idx] = items[size-1];
+        // avoid loitering
+        items[size-1] = null;
     }
 
     /**
