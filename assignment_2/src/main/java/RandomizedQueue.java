@@ -80,12 +80,42 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         return items[idx];
     }
 
+
+    private class RandomizeQueueIterator implements Iterator<Item> {
+        private int size;
+        private Item[] items;
+
+        private RandomizeQueueIterator() {
+            this.size = RandomizedQueue.this.size;
+            items = (Item[]) new Object[size];
+            for (int i=0; i<size; i++) items[i] = RandomizedQueue.this.items[i];
+        }
+
+        @Override
+        public boolean hasNext() {
+            return size != 0;
+        }
+
+        @Override
+        public Item next() {
+            if (size == 0) throw new NoSuchElementException();
+            int idx = StdRandom.uniform(size);
+            Item item = items[idx];
+
+            // reorder
+            items[idx] = items[size-1];
+
+            size--;
+            return item;
+        }
+    }
+
     /**
      * return an independent iterator over items in random order
      * @return
      */
     @Override
     public Iterator<Item> iterator() {
-        return null;
+        return new RandomizeQueueIterator();
     }
 }

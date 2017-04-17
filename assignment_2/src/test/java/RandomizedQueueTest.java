@@ -68,11 +68,12 @@ public class RandomizedQueueTest {
 
     @Test
     public void dequeueTest() {
-        RandomizedQueue<String> rq = new RandomizedQueue<>();
         Set<String> set = new HashSet<>();
         set.add("a");
         set.add("b");
         set.add("c");
+
+        RandomizedQueue<String> rq = new RandomizedQueue<>();
 
         // enqueue
         for (String s: set) rq.enqueue(s);
@@ -85,6 +86,25 @@ public class RandomizedQueueTest {
             set.remove(s);
         }
         Assert.assertTrue(rq.isEmpty());
+    }
+
+    @Test
+    public void iteratorTest() {
+        Set<String> set = new HashSet<>();
+        set.add("a");
+        set.add("b");
+        set.add("c");
+        set.add("d");
+
+        RandomizedQueue<String> rq = new RandomizedQueue<>();
+
+        // enqueue
+        for (String s: set) rq.enqueue(s);
+
+        for (String s: rq) Assert.assertTrue(set.contains(s));
+
+        Assert.assertEquals(rq.size(), set.size());
+
     }
 
     private void assertSamplesComplete(RandomizedQueue<Integer> rq, int[] samples) {
