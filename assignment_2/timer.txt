@@ -4,3 +4,4 @@ start    end
 15:30    16:45  added Randomized Queue
 16:45    16:55  added iterator
 16:55    17:20  added Permutation
+19:50    17:51  correctings enqueue
